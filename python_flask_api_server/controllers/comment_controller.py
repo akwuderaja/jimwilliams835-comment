@@ -1,6 +1,5 @@
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
-from auth.auth import token_auth, get_current_user
 import models.comment as comment
 from models.view_models import CommentCreate
 
@@ -26,7 +25,6 @@ def getCommentModel():
     return _comment
 
 class Comment_controller():
-    @token_auth.login_required
     def get():
         search_string: str = request.args.get('search_string', '', str)
         status: int = request.args.get('status', -1, int)
