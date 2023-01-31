@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .row{
+            display: inline;
+        }
+        form{
+            width: 600px;
+            max-width: 100%;
+            padding: 5px;
+            margin: 5px 10px;
+        }
+        input, textarea{
+            border-radius: 10px;
+            padding: 5px 10px;
+            margin-bottom: 5px;
+        }
+        textarea{
+            min-height: 150px;
+            width: 90%;
+        }
+        input[type="text"], input[type="email"] {
+            width: 40%;
+            min-width: 150px;
+        }
+        input[type="submit"] {
+            min-width: 100px;
+        }
+        .name-field {
+            /* width: 2in;
+            margin-left: 18pt; */
+        }
+        .address-field {
+            /* width: 2.5in;
+            margin-left: 18pt; */
+        }
+        
+        .submit {
+            text-align: right;
+        }
+
+        .comment{
+            /* width:5in;
+            margin-left: 18pt; */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <script type="text/javascript">
+            function validateMyForm()
+            {
+                //   if(check if your conditions are not satisfying)
+                //   { 
+                //     alert("validation failed false");
+                //     returnToPreviousPage();
+                //     return false;
+                //   }
+
+                var parameters = JSON.stringify({
+                    "name":document.getElementById("name").value,
+                    "comment":document.getElementById("comment").value,
+                    "address":document.getElementById("address").value
+                });
+                xmlhttp = new XMLHttpRequest();
+                xmlhttp.setRequestHeader("Content-type", "application/json");
+                xmlhttp.open("POST", "ServerURL/api/v1/comments", true);
+                xmlhttp.onreadystatechange = function () { //Call a function when the state changes.
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        alert(xmlhttp.responseText);
+                        //cb(xmlhttp.responseText);               
+                    }
+                };
+                xmlhttp.send(parameters);
+
+              return true;
+            }
+        </script>
+        <form onsubmit="event.preventDefault(); validateMyForm();">
+            <label for="name">Draft-comment form<br><br></label>
+            <div class="row"> 
+                <input type="text" id="name" name="name" required="" 
+                    class="name-field" placeholder="User name">*
+                <input type="email" id="address" class="address-field" 
+                    placeholder="email address ">
+            </div>
+            <div> 
+                <textarea id="comment-value" name="comment" required="" 
+                    placeholder="comment text" class="comment"></textarea>*
+            </div>
+            <div class="submit">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
