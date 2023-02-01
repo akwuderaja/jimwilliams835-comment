@@ -34,18 +34,19 @@ def get_comments(search_string: str = '', status: int = -1):
             # Check for search_string
             if search_string == '':
                 count+=1
-                return_value.append({count: result.serialize()})
+                return_value.append(result.serialize())
             else:
                 can_add = False
                 if (search_string in result.name.lower() or 
                     search_string in result.id.lower() or
                     search_string in str(result.comment.lower()) or 
+                    search_string in str(result.article_id.lower()) or 
                     search_string in str(result.address.lower())):
                     can_add = True
 
                 if can_add:
                     count+=1
-                    return_value.append({count: result.serialize()})
+                    return_value.append(result.serialize())
 
     # print(return_value)
     return {'comments': return_value}
@@ -69,6 +70,7 @@ def create_comment(_comment: CommentCreate):
             name=_comment.name,
             address=_comment.address,
             comment=_comment.comment,
+            article_id=_comment.article_id,
             status=0
         )
         session.add(obj)

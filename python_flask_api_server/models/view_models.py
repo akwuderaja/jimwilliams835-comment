@@ -11,4 +11,5 @@ class CommentCreate(BaseModel):
     name: str
     comment: str
     address: str
+    article_id: str
 

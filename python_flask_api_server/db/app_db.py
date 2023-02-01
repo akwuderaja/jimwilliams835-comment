@@ -8,7 +8,7 @@ Base = declarative_base()
 #engine = create_engine("mysql+pymysql://root@localhost:8080/smartstoreng_db")
 #For local Host
 # engine = create_engine("mysql+pymysql://root@localhost/smartstoreng_db", echo=True, future=True)
-engine = create_engine("mysql+pymysql://rayztban_project_user:6NtE-)c$;Afj(kx@localhost/rayztban_project_db")
+engine = create_engine("mysql+pymysql://irbegvav_investuser:InvestTemp@localhost/irbegvav_comments")
 
 
 class comment(Base):
@@ -17,14 +17,16 @@ class comment(Base):
     name = Column(String(100), nullable=False)
     address = Column(String(100), nullable=False)
     comment = Column(String(1500), nullable=False)
+    article_id = Column(String(100), nullable=False)
     time_posted = Column(DateTime(timezone=True), server_default=func.now())
-    # time_updated = Column(DateTime(timezone=True), onupdate=func.now())
+    time_updated = Column(DateTime(timezone=True), onupdate=func.now())
     status = Column(INT())
     
 
     def __repr__(self):
         return f"property(id={self.id!r}, name={self.name!r}, \
             address={self.address!r}, comment={self.comment!r}, \
+            article_id={self.article_id!r}, \
             time_posted={self.time_posted!r}, \
             time_updated={self.time_updated!r}, \
             status={self.status!r}\
@@ -36,6 +38,7 @@ class comment(Base):
             "name": self.name,
             "address": self.address,
             "comment": self.comment,
+            "article_id": self.article_id,
             "time_posted": self.time_posted,
             "time_updated": self.time_updated,
             "status": self.status,

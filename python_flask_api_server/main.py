@@ -13,11 +13,11 @@ CORS(app, resources={r"/api/*": {"origins": "*"}}, support_credentials=True, all
     origins = [
         "http://localhost:3000",
         "https://localhost:3000",
-        "http://signup.rayzerbusiness.com",
-        "https://signup.rayzerbusiness.com",
-        "http://rayzerbusiness.com",
-        "https://rayzerbusiness.com",
-        "37.130.224.21:0",
+        "http://hempforhealth.net",
+        "https://hempforhealth.net",
+        "http://pagenotes.com",
+        "https://pagenotes.com",
+        "37.130.22.21:0",
     ]
 )
 api = Api(app, version='1.0', title='Rayzer Business Technology', 

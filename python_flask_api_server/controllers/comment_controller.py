@@ -5,9 +5,10 @@ from models.view_models import CommentCreate
 
 
 commentCreate = reqparse.RequestParser()
-commentCreate.add_argument("name", type=str, help="User's name")
-commentCreate.add_argument("address", type=str, help="User's address")
-commentCreate.add_argument("comment", type=str, help="User's comment")
+commentCreate.add_argument("name", type=str, help="Comment's name")
+commentCreate.add_argument("address", type=str, help="Comment's address")
+commentCreate.add_argument("comment", type=str, help="Comment's comment")
+commentCreate.add_argument("article_id", type=str, help="Comment's article_id")
 
 
 commentModel = reqparse.RequestParser()
@@ -21,6 +22,7 @@ def getCommentModel():
         name=_result['name'],
         address=_result['address'],
         comment=_result['comment'],
+        article_id=_result['article_id'],
     )
     return _comment
 

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Comments</title>
     <style>
         .name, .comment, .address, .time_posted{
             margin: 5px;
@@ -25,35 +25,13 @@
             padding: 5px;
             margin: 5px 10px;
         }
-        input, textarea{
-            border-radius: 10px;
-            padding: 5px 10px;
-            margin-bottom: 5px;
+        .row{
+            display: inline;
         }
-        textarea{
-            min-height: 150px;
-            width: 90%;
+        .del{
+            float: right;
+            padding: 5px;
         }
-        input[type="text"], input[type="email"] {
-            width: 40%;
-            min-width: 150px;
-        }
-        input[type="submit"] {
-            min-width: 100px;
-        }
-        .name-field {
-            /* width: 2in;
-            margin-left: 18pt; */
-        }
-        .address-field {
-            /* width: 2.5in;
-            margin-left: 18pt; */
-        }
-        
-        .submit {
-            text-align: right;
-        }
-
         .comment{
             /* width:5in;
             margin-left: 18pt; */
@@ -61,60 +39,12 @@
     </style>
 </head>
 
-<body>
+<body onload="GetDataAll()">
     <div class="container">
         <script type="text/javascript">
             const baseAPIUrl = "https://comments.irb-e.com/api/v1/";
             const article_id = "1234";
-            GetDataAll();
-            function validateMyForm()
-            {
-                //   if(check if your conditions are not satisfying)
-                //   { 
-                //     alert("validation failed false");
-                //     returnToPreviousPage();
-                //     return false;
-                //   }
-
-                PostData(); 
-                return true;
-            }
-            
-            async function PostData(){
-                try {
-                    const h =  {
-                        'Content-Type': 'application/json',
-                        "Access-Control-Allow-Origin": "*"
-                    }; 
-                    var parameters = JSON.stringify({
-                        "name":document.getElementById("name").value,
-                        "comment":document.getElementById("comment").value,
-                        "address":document.getElementById("address").value,
-                        "article_id":article_id
-                    });
-                    var response = await fetch(baseAPIUrl + "comments", {
-                        method: "POST", 
-                        headers: h,
-                        body: parameters
-                    });
-
-                    // console.log(response);
-                    if(response.status === 200){
-                        var result = await response.json();
-                        // console.log(result)
-                        alert(result["message"])   
-                        if(result["id"]!==undefined)
-                            GetData(result["id"]);
-                    }else{
-                        alert('Invalid Request')
-                    }
-                } catch (error) {
-                    // console.log(error);
-                    var errM = error.toString().replace("TypeError: ", "")
-                    alert(errM)
-                }
-            }
-            
+            // GetDataAll();
             async function GetDataAll(){
                 try {
                     const h =  {
@@ -145,25 +75,28 @@
                     alert(errM)
                 }
             }
+                          
             
-            async function GetData(id){
+            async function DeleteData(id){
                 try {
                     const h =  {
                         'Content-Type': 'application/json',
                         "Access-Control-Allow-Origin": "*"
                     }; 
                     var response = await fetch(baseAPIUrl + "comments/" + id, {
-                        method: "GET", 
+                        method: "Delete", 
                         headers: h,
                     });
 
                     // console.log(response);
                     if(response.status === 200){
                         var result = await response.json();
-                        console.log(result);
-                        if(result["status"]!==undefined)
-                            AddComment(result);
-                        // return result;                
+                        if(result["message"]!==undefined){
+                            alert(result["message"])
+                            const commentDiv = document.getElementById("divComment");
+                            commentDiv.innerHTML ="";
+                            GetDataAll();
+                        }
                     }else{
                         alert('Invalid Request')
                     }
@@ -179,6 +112,9 @@
                 // create a new div element
                 const cDiv = document.createElement("div");
                 const content = "<div>" + 
+                    "<button class='del' onclick='DeleteData(\"" + comment.id + 
+                        "\")'>Delete</button>" + 
+                    "</div><div>" + 
                     "<label class='name'>" + 
                         comment.name +
                     "</label>" +
@@ -193,11 +129,11 @@
                 "</div>"
 
                 //content
-                // const newUser = document.createTextNode(result.name);
-                // const newEmail = document.createTextNode(result.address);
-                // const newComment = document.createTextNode(result.comment);
+                // const newUser = document.createTextNode(comment.name);
+                // const newEmail = document.createTextNode(comment.address);
+                // const newComment = document.createTextNode(comment.comment);
                 // const newTimePosted = document.createTextNode(
-                //     dateFormater(result.time_posted)
+                //     dateFormater(comment.time_posted)
                 // );
 
                 // add the text node to the newly created div
@@ -221,36 +157,12 @@
 
                 return vals[0] + " " +  vals[1].substring(0,8);
             }
-            function dateConverter(val){
-                if(val==null) 
-                    val = new Date();
-                else
-                    val = new Date(val);
-                const offset = val.getTimezoneOffset(); 
-                val = new Date(val.getTime() + (offset*60*1000)); 
-                var vals = val.toISOString().split('T');
-                return vals[0];// + " " +  vals[1].substring(0,8);
-            }
+        
         </script>
         <div id="divComment">
 
         </div>
-        <form onsubmit="event.preventDefault(); validateMyForm();">
-            <label for="name">Draft-comment form<br><br></label>
-            <div class="row"> 
-                <input type="text" id="name" name="name" required="" 
-                    class="name-field" placeholder="User name">*
-                <input type="email" id="address" class="address-field" 
-                    placeholder="email address ">
-            </div>
-            <div> 
-                <textarea id="comment" name="comment" required="" 
-                    placeholder="comment text" class="comment"></textarea>*
-            </div>
-            <div class="submit">
-                <input type="submit" value="Submit">
-            </div>
-        </form>
+        
     </div>
 </body>
 
