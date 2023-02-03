@@ -1,8 +1,10 @@
-from flask import send_file
+from decouple import config
+from flask import send_file, request
 from ast import stmt
 import os
 from typing import List
 from uuid import UUID, uuid4
+from models.email_sender import Send_Email
 from werkzeug.exceptions import BadRequest, NotFound, Unauthorized
 
 from db.app_db import engine, comment
@@ -75,6 +77,16 @@ def create_comment(_comment: CommentCreate):
         )
         session.add(obj)
         session.commit()
+        
+        msg = f"""
+            New Comment on: </h5>{request.headers.get('User-Agent')}
+            <br/>
+            <h5>Comment Details:</h5>
+            <h5>Name:</h5>{_comment.name}
+            <h5>Address:</h5>{_comment.address}
+            <h5>Comment:</h5>{_comment.comment}.
+        """
+        Send_Email(config("admin_email"), msg, "New Comment from " + _comment.name)
     return {"id": id, "message": 'success'}
 
 

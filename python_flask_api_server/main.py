@@ -5,6 +5,7 @@ from typing import Optional, List
 from uuid import uuid4, UUID
 from flask_cors import CORS, cross_origin
 from controllers.comment_controller import Comment_controller as comment
+from models.email_sender import Send_Guest_To_Support_Email
 
 app = Flask(__name__) #, static_url_path='/static')
 #CORS(app)
@@ -65,6 +66,19 @@ def delete_comment(id: str):
 @cross_origin(supports_credentials=True)
 def change_status_comment(_id: str):
     return comment.change_status(_id)
+
+
+
+@app.post("/api/v1/Send_Support_Email")
+@cross_origin(supports_credentials=True)
+def SendSupportEmail():
+    return Send_Guest_To_Support_Email()
+
+
+# @app.post("/api/v1/Send_Admin_Support_Email")
+# @cross_origin(supports_credentials=True)
+# def SendAdminSupportEmail():
+#     return user.Send_Admin_Support_Email()
 
 
 
